@@ -95,3 +95,14 @@ $RECYCLE.BIN/
 *.exe
 *.out
 *.app
+
+# Project documentation files
+Layup_PRD-2.md
+Layup_PRD.md
+Layup_Product_Brief.md
+Software_Architecture_Plan.md
+IMPLEMENTATION_PLAN.md
+Layup_Modifications_Summary.md
+TEST_EXECUTION_REPORT.md
+RELEASE_CHECKLIST.md
+.roomodes
