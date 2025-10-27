@@ -1,0 +1,3 @@
+# Minimal Example - Just Two Apps
+com.apple.mobilesafari
+com.apple.mobilemail

@@ -1,0 +1,70 @@
+# Sample Home Screen Layout with Detailed Comments
+# This file demonstrates how to use comments to organize and document your Bundle IDs
+
+# ============================================
+# COMMUNICATION SECTION
+# ============================================
+# Essential apps for staying connected
+
+# Web browsing
+com.apple.mobilesafari
+
+# Email client
+com.apple.mobilemail
+
+# Text messaging
+com.apple.MobileSMS
+
+# Video calling
+com.apple.facetime
+
+# Contact management
+com.apple.contacts
+
+# ============================================
+# PRODUCTIVITY SECTION
+# ============================================
+# Apps for getting work done
+
+# Calendar and scheduling
+com.apple.mobilecal
+
+# Task management
+com.apple.reminders
+
+# Note-taking
+com.apple.mobilenotes
+
+# File management
+com.apple.DocumentsApp
+
+# ============================================
+# MEDIA & ENTERTAINMENT
+# ============================================
+# Apps for music, video, and photos
+
+# Music player
+com.apple.Music
+
+# Video streaming
+com.apple.tv
+
+# Photo library
+com.apple.mobileslideshow
+
+# Podcast player
+com.apple.podcasts
+
+# ============================================
+# UTILITIES
+# ============================================
+# Helpful tools and utilities
+
+# Maps and navigation
+com.apple.Maps
+
+# Weather forecasts
+com.apple.weather
+
+# Clock and alarms
+com.apple.mobiletimer

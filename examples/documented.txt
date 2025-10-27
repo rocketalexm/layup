@@ -1,0 +1,119 @@
+# Documented Example - Learning Resource
+# This file serves as a comprehensive example for learning how to use Layup
+
+# ============================================
+# WHAT IS THIS FILE?
+# ============================================
+# This is an input file for Layup, a tool that generates Apple MDM
+# Home Screen Layout configuration profiles from plain text Bundle ID lists.
+#
+# Each non-comment, non-empty line should contain a valid Bundle ID.
+# Bundle IDs uniquely identify iOS/iPadOS apps.
+
+# ============================================
+# BUNDLE ID FORMAT
+# ============================================
+# Valid Bundle IDs must:
+# - Have at least 2 segments separated by dots (e.g., com.apple)
+# - Use only letters (a-z, A-Z), numbers (0-9), hyphens (-), and underscores (_)
+# - Not start or end with a dot
+# - Not have consecutive dots
+# - Be case-sensitive (preserve exact case)
+#
+# Examples:
+# ✓ com.apple.safari          (valid - lowercase)
+# ✓ com.apple.MobileSMS       (valid - mixed case)
+# ✓ com.company-name.app      (valid - with hyphen)
+# ✓ com.company_name.app      (valid - with underscore)
+# ✗ invalid                   (invalid - only 1 segment)
+# ✗ com.app@test              (invalid - contains @)
+# ✗ com..app                  (invalid - consecutive dots)
+
+# ============================================
+# HOW TO USE COMMENTS
+# ============================================
+# Lines starting with # are comments and will be ignored
+# Use comments to:
+# - Organize apps into sections
+# - Document why specific apps are included
+# - Add notes for future reference
+# - Make the file easier to maintain
+
+# Empty lines are also ignored and can be used for visual separation
+
+# ============================================
+# EXAMPLE APPS
+# ============================================
+
+# Communication Apps
+# These apps help users stay connected
+
+# Safari - Web browser
+com.apple.mobilesafari
+
+# Mail - Email client
+com.apple.mobilemail
+
+# Messages - Text messaging (note: mixed case!)
+com.apple.MobileSMS
+
+# FaceTime - Video calling
+com.apple.facetime
+
+# Productivity Apps
+# Essential tools for getting work done
+
+# Calendar - Scheduling and events
+com.apple.mobilecal
+
+# Reminders - Task management
+com.apple.reminders
+
+# Notes - Note-taking
+com.apple.mobilenotes
+
+# Files - File management
+com.apple.DocumentsApp
+
+# Media Apps
+# Entertainment and media consumption
+
+# Music - Music player (note: capital M!)
+com.apple.Music
+
+# Apple TV - Video streaming
+com.apple.tv
+
+# Photos - Photo library
+com.apple.mobileslideshow
+
+# ============================================
+# TIPS FOR CREATING YOUR OWN FILES
+# ============================================
+# 1. Find Bundle IDs using:
+#    - Apple Configurator 2
+#    - MDM platform app catalogs
+#    - Terminal: mdls -name kMDItemCFBundleIdentifier /Applications/App.app
+#    - See docs/BUNDLE_ID_REFERENCE.md for more methods
+#
+# 2. Verify Bundle IDs are correct:
+#    - Case matters! com.apple.mobilesms ≠ com.apple.MobileSMS
+#    - Check official sources for exact Bundle IDs
+#
+# 3. Test your file:
+#    - Run: ./layup.sh your_file.txt output.mobileconfig
+#    - Check validation output for any errors
+#
+# 4. Organize logically:
+#    - Group related apps together
+#    - Use comments to explain sections
+#    - Keep frequently updated apps at the top
+
+# ============================================
+# NEXT STEPS
+# ============================================
+# After generating your .mobileconfig file:
+# 1. Validate the XML: xmllint --noout output.mobileconfig
+# 2. Deploy via your MDM platform (Jamf Pro, Workspace ONE, Intune, etc.)
+# 3. Verify on test devices before production deployment
+# 4. See docs/TESTING_GUIDE.md for comprehensive testing procedures

@@ -1,0 +1,156 @@
+name: Test Suite
+
+on:
+  push:
+    branches:
+      - main
+      - 'feature/**'
+      - 'bugfix/**'
+      - 'refactor/**'
+      - 'test/**'
+      - 'docs/**'
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    name: Run Bats Tests
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Install Bats
+        run: |
+          git clone https://github.com/bats-core/bats-core.git /tmp/bats-core
+          cd /tmp/bats-core
+          sudo ./install.sh /usr/local
+      
+      - name: Verify Bats installation
+        run: |
+          bats --version
+      
+      - name: Run test suite
+        id: test_run
+        run: |
+          # Run tests and capture output
+          bats tests/ > test_output.txt 2>&1 || true
+          cat test_output.txt
+          
+          # Extract test statistics
+          TOTAL_TESTS=$(grep -oP '\d+(?= tests?)' test_output.txt | head -1 || echo "0")
+          FAILURES=$(grep -oP '\d+(?= failures?)' test_output.txt | head -1 || echo "0")
+          
+          # Calculate passed tests and success rate
+          PASSED=$((TOTAL_TESTS - FAILURES))
+          if [ "$TOTAL_TESTS" -gt 0 ]; then
+            SUCCESS_RATE=$(awk "BEGIN {printf \"%.1f\", ($PASSED/$TOTAL_TESTS)*100}")
+          else
+            SUCCESS_RATE="0.0"
+          fi
+          
+          # Output statistics
+          echo "total_tests=$TOTAL_TESTS" >> $GITHUB_OUTPUT
+          echo "passed_tests=$PASSED" >> $GITHUB_OUTPUT
+          echo "failed_tests=$FAILURES" >> $GITHUB_OUTPUT
+          echo "success_rate=$SUCCESS_RATE" >> $GITHUB_OUTPUT
+          
+          # Exit with failure if tests failed
+          if [ "$FAILURES" -gt 0 ]; then
+            exit 1
+          fi
+      
+      - name: Generate test summary
+        if: always()
+        run: |
+          echo "## Test Results Summary 📊" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Metric | Value |" >> $GITHUB_STEP_SUMMARY
+          echo "|--------|-------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Total Tests | ${{ steps.test_run.outputs.total_tests }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Tests Passed | ✅ ${{ steps.test_run.outputs.passed_tests }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Tests Failed | ❌ ${{ steps.test_run.outputs.failed_tests }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Success Rate | ${{ steps.test_run.outputs.success_rate }}% |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          if [ "${{ steps.test_run.outputs.failed_tests }}" -eq 0 ]; then
+            echo "✅ **All tests passed!**" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "⚠️ **Some tests failed. Please review the test output above.**" >> $GITHUB_STEP_SUMMARY
+          fi
+      
+      - name: Check script syntax (when layup.sh exists)
+        run: |
+          if [ -f layup.sh ]; then
+            bash -n layup.sh
+          else
+            echo "layup.sh not yet created, skipping syntax check"
+          fi
+      
+      - name: Install ShellCheck
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y shellcheck
+      
+      - name: Run ShellCheck linting
+        continue-on-error: true
+        run: |
+          if [ -f layup.sh ]; then
+            echo "## ShellCheck Linting Results 🔍" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            
+            # Run ShellCheck and capture output
+            if shellcheck layup.sh > shellcheck_output.txt 2>&1; then
+              echo "✅ **No ShellCheck issues found!**" >> $GITHUB_STEP_SUMMARY
+            else
+              echo "⚠️ **ShellCheck found some issues (non-blocking):**" >> $GITHUB_STEP_SUMMARY
+              echo "" >> $GITHUB_STEP_SUMMARY
+              echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+              cat shellcheck_output.txt >> $GITHUB_STEP_SUMMARY
+              echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+            fi
+          else
+            echo "layup.sh not found, skipping ShellCheck"
+          fi
+  
+  integration:
+    name: Integration Tests
+    runs-on: ubuntu-latest
+    needs: test
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Make script executable (when it exists)
+        run: |
+          if [ -f layup.sh ]; then
+            chmod +x layup.sh
+          else
+            echo "layup.sh not yet created, skipping integration tests"
+            exit 0
+          fi
+      
+      - name: Test with sample input (when examples exist)
+        run: |
+          if [ -f layup.sh ] && [ -f examples/sample_apps.txt ]; then
+            ./layup.sh examples/sample_apps.txt test_output.mobileconfig
+          else
+            echo "Script or examples not yet created, skipping"
+            exit 0
+          fi
+      
+      - name: Validate generated XML (when output exists)
+        run: |
+          if [ -f test_output.mobileconfig ]; then
+            xmllint --noout test_output.mobileconfig
+          else
+            echo "No output file to validate, skipping"
+            exit 0
+          fi
+      
+      - name: Cleanup
+        if: always()
+        run: |
+          rm -f test_output.mobileconfig

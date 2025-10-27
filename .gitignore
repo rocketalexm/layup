@@ -1,0 +1,97 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Icon must end with two \r
+Icon
+
+# Thumbnails
+._*
+
+# Files that might appear in the root of a volume
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+
+# Directories potentially created on remote AFP share
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+# Generated .mobileconfig files (except examples)
+*.mobileconfig
+!examples/**/*.mobileconfig
+!examples/expected_outputs/*.mobileconfig
+
+# Test output files
+test_output/
+*.test.txt
+*.test.xml
+
+# Bats test artifacts
+tests/*.log
+tests/test-results/
+
+# Backup files
+*.bak
+*.backup
+*~
+
+# Editor files
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+*.sublime-*
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# Log files
+*.log
+logs/
+
+# Coverage reports (if using coverage tools)
+coverage/
+.coverage
+
+# Environment files
+.env
+.env.local
+
+# Build artifacts
+dist/
+build/
+
+# Package manager files (if using)
+node_modules/
+package-lock.json
+yarn.lock
+
+# OS generated files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Shell script artifacts
+*.sh.bak
+*.sh~
+
+# Compiled files (if any)
+*.o
+*.so
+*.dylib
+*.exe
+*.out
+*.app

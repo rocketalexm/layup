@@ -1,0 +1,19 @@
+# Sample Home Screen Layout - Common Apps
+# This file demonstrates a basic home screen layout with commonly used apps
+
+# Communication Apps
+com.apple.mobilesafari
+com.apple.mobilemail
+com.apple.MobileSMS
+com.apple.facetime
+
+# Productivity Apps
+com.apple.mobilecal
+com.apple.reminders
+com.apple.mobilenotes
+com.apple.DocumentsApp
+
+# Media & Entertainment
+com.apple.Music
+com.apple.tv
+com.apple.mobileslideshow
